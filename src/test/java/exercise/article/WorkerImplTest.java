@@ -1,17 +1,27 @@
 package exercise.article;
 
 import exercise.worker.WorkerImpl;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static jdk.dynalink.linker.support.Guards.isNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class WorkerImplTest {
     private WorkerImpl worker;
-    @Mock private LibraryImpl mockedLibrary;
+    @Mock private Library mockedLibrary;
     List<Article> testArticles = new ArrayList<>();
 
 
@@ -50,10 +60,13 @@ class WorkerImplTest {
                 null,
                 LocalDate.of(2023, 1, 6)));
     }
-
+    @AfterEach
+    void clearence() {
+        testArticles.clear();
+    }
 
     @Test
-    void getCatalogTest() throws  Exception {
+    void getCatalogTest() {
         var actualResult = " Что такое функциональное чтение? Или как эффективно учиться программированию";
         when(mockedLibrary.getAllTitles()).thenReturn(Arrays.asList(actualResult));
 
@@ -64,7 +77,7 @@ class WorkerImplTest {
     }
 
     @Test
-    void articlesPreparedCorrectlyTest() throws Exception {
+    void articlesPreparedCorrectlyTest() {
         var result = worker.prepareArticles(testArticles);
         List<Article> expectedResult = new ArrayList<>();
 
@@ -110,7 +123,7 @@ class WorkerImplTest {
 
 
     @Test
-    void addNewArticlesTest() throws Exception {
+    void addNewArticlesTest(){
         var result = worker.prepareArticles(testArticles);
 
         worker.addNewArticles(result);
